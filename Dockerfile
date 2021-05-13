@@ -5,21 +5,19 @@ ARG MAJOR=daffy
 ARG BASE_TAG=${MAJOR}-${ARCH}
 ARG AIDO_REGISTRY=docker.io
 
-FROM ${AIDO_REGISTRY}/duckietown/dt-car-interface:${BASE_TAG} AS dt-car-interface
+FROM ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-baseline-duckietown:${BASE_TAG} AS baseline
 
-FROM ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-template-ros:${BASE_TAG} AS template
-
-FROM ${AIDO_REGISTRY}/duckietown/dt-core:${BASE_TAG} AS dt-core
-
-FROM ${AIDO_REGISTRY}/duckietown/dt-machine-learning-base-environment:${BASE_TAG} as base
+FROM ${AIDO_REGISTRY}/duckietown/dt-machine-learning-base-environment:${BASE_TAG} AS base
 
 WORKDIR /code
 
-COPY --from=dt-car-interface ${CATKIN_WS_DIR}/src/dt-car-interface ${CATKIN_WS_DIR}/src/dt-car-interface
+COPY --from=baseline ${CATKIN_WS_DIR}/src/dt-car-interface ${CATKIN_WS_DIR}/src/dt-car-interface
 
-COPY --from=dt-core ${CATKIN_WS_DIR}/src/dt-core ${CATKIN_WS_DIR}/src/dt-core
+COPY --from=baseline ${CATKIN_WS_DIR}/src/dt-core ${CATKIN_WS_DIR}/src/dt-core
 
-COPY --from=template /data/config /data/config
+COPY --from=baseline /data/config /data/config
+
+COPY --from=baseline /code/submission_ws/src/agent /code/submission_ws/src/agent
 
 # here, we install the requirements, some requirements come by default
 # you can add more if you need to in requirements.txt
@@ -40,7 +38,8 @@ RUN pip list
 
 RUN mkdir submission_ws
 COPY submission_ws/src submission_ws/src
-COPY launchers .
+RUN mkdir launchers
+COPY launchers/ launchers
 
 COPY --from=template /code/submission_ws/src/agent /code/submission_ws/src/agent
 
@@ -56,4 +55,4 @@ RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
     catkin build --workspace /code/submission_ws
 
 ENV DISABLE_CONTRACTS=1
-CMD ["bash", "run_and_start.sh"]
+CMD ["bash", "launchers/run_and_start.sh"]
