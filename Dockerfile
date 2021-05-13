@@ -9,11 +9,15 @@ FROM ${AIDO_REGISTRY}/duckietown/dt-car-interface:${BASE_TAG} AS dt-car-interfac
 
 FROM ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-template-ros:${BASE_TAG} AS template
 
-FROM ${AIDO_REGISTRY}/duckietown/dt-core:${BASE_TAG} AS base
+FROM ${AIDO_REGISTRY}/duckietown/dt-core:${BASE_TAG} AS dt-core
+
+FROM ${AIDO_REGISTRY}/duckietown/dt-machine-learning-base-environment:${BASE_TAG} as base
 
 WORKDIR /code
 
 COPY --from=dt-car-interface ${CATKIN_WS_DIR}/src/dt-car-interface ${CATKIN_WS_DIR}/src/dt-car-interface
+
+COPY --from=dt-core ${CATKIN_WS_DIR}/src/dt-core ${CATKIN_WS_DIR}/src/dt-core
 
 COPY --from=template /data/config /data/config
 
