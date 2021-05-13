@@ -26,22 +26,24 @@ ARG PIP_INDEX_URL
 ENV PIP_INDEX_URL=${PIP_INDEX_URL}
 RUN echo PIP_INDEX_URL=${PIP_INDEX_URL}
 
+# since we are building FROM dt-core we need to install it's dependencies
+ARG DT_CORE_PATH=${CATKIN_WS_DIR}/src/dt-core
+RUN dt-apt-install ${DT_CORE_PATH}/dependencies-apt.txt
+
 RUN pip install -U "pip>=20.2" pipdeptree
+RUN pip3 install --use-feature=2020-resolver -r ${DT_CORE_PATH}/dependencies-py3.txt
+
 COPY requirements.* ./
 RUN cat requirements.* > .requirements.txt
-RUN  pip3 install --use-feature=2020-resolver -r .requirements.txt
+RUN  pip3 install -r .requirements.txt
 
 
 RUN echo PYTHONPATH=$PYTHONPATH
 RUN pipdeptree
 RUN pip list
 
-RUN mkdir submission_ws
 COPY submission_ws/src submission_ws/src
-RUN mkdir launchers
 COPY launchers/ launchers
-
-COPY --from=template /code/submission_ws/src/agent /code/submission_ws/src/agent
 
 ENV HOSTNAME=agent
 ENV VEHICLE_NAME=agent
