@@ -30,8 +30,9 @@ RUN echo PIP_INDEX_URL=${PIP_INDEX_URL}
 ARG DT_CORE_PATH=${CATKIN_WS_DIR}/src/dt-core
 RUN dt-apt-install ${DT_CORE_PATH}/dependencies-apt.txt
 
+
 RUN pip install -U "pip>=20.2" pipdeptree
-RUN pip3 install --use-feature=2020-resolver -r ${DT_CORE_PATH}/dependencies-py3.txt
+RUN pip3 install -r ${DT_CORE_PATH}/dependencies-py3.txt
 
 COPY requirements.* ./
 RUN cat requirements.* > .requirements.txt
