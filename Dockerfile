@@ -24,24 +24,23 @@ COPY --from=baseline /code/submission_ws/src/agent /code/submission_ws/src/agent
 
 ARG PIP_INDEX_URL
 ENV PIP_INDEX_URL=${PIP_INDEX_URL}
-RUN echo PIP_INDEX_URL=${PIP_INDEX_URL}
 
-# since we are building FROM dt-core we need to install it's dependencies
+# since we are building FROM dt-core we need to install its dependencies
 ARG DT_CORE_PATH=${CATKIN_WS_DIR}/src/dt-core
 RUN dt-apt-install ${DT_CORE_PATH}/dependencies-apt.txt
 
 
-RUN pip install -U "pip>=20.2" pipdeptree
-RUN pip3 install -r ${DT_CORE_PATH}/dependencies-py3.txt
+RUN python3 -m pip install  pipdeptree
+RUN python3 -m pip install -r ${DT_CORE_PATH}/dependencies-py3.txt
 
 COPY requirements.* ./
 RUN cat requirements.* > .requirements.txt
-RUN  pip3 install -r .requirements.txt
+RUN python3 -m pip install -r .requirements.txt
 
 
 RUN echo PYTHONPATH=$PYTHONPATH
 RUN pipdeptree
-RUN pip list
+RUN python3 -m pip list
 
 COPY submission_ws/src submission_ws/src
 COPY launchers/ launchers
