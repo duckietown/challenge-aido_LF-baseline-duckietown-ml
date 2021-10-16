@@ -3,11 +3,11 @@
 ARG ARCH=amd64
 ARG MAJOR=daffy
 ARG BASE_TAG=${MAJOR}-${ARCH}
-ARG AIDO_REGISTRY=docker.io
+ARG DOCKER_REGISTRY=docker.io
 
-FROM ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-baseline-duckietown:${BASE_TAG} AS baseline
+FROM ${DOCKER_REGISTRY}/duckietown/challenge-aido_lf-baseline-duckietown:${BASE_TAG} AS baseline
 
-FROM ${AIDO_REGISTRY}/duckietown/dt-machine-learning-base-environment:${BASE_TAG} AS base
+FROM ${DOCKER_REGISTRY}/duckietown/dt-machine-learning-base-environment:${BASE_TAG} AS base
 
 WORKDIR /code
 
