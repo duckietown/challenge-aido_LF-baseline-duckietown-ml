@@ -7,7 +7,7 @@ ARG DOCKER_REGISTRY=docker.io
 
 FROM ${DOCKER_REGISTRY}/duckietown/challenge-aido_lf-baseline-duckietown:${BASE_TAG} AS baseline
 
-FROM ${DOCKER_REGISTRY}/duckietown/dt-machine-learning-base-environment:${BASE_TAG} AS base
+FROM ${DOCKER_REGISTRY}/duckietown/challenge-aido_LF-template-pytorch:${BASE_TAG} AS base
 
 WORKDIR /code
 
