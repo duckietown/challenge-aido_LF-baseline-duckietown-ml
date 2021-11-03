@@ -17,7 +17,7 @@ COPY --from=baseline ${CATKIN_WS_DIR}/src/dt-core ${CATKIN_WS_DIR}/src/dt-core
 
 COPY --from=baseline /data/config /data/config
 
-COPY --from=baseline /code/submission_ws/src/agent /code/submission_ws/src/agent
+COPY --from=baseline /code/submission_ws/ /code/submission_ws/
 
 # here, we install the requirements, some requirements come by default
 # you can add more if you need to in requirements.txt
@@ -42,8 +42,8 @@ RUN echo PYTHONPATH=$PYTHONPATH
 RUN pipdeptree
 RUN python3 -m pip list
 
-COPY submission_ws/src submission_ws/src
-COPY launchers/ launchers
+COPY solution /code/solution
+COPY launchers/ /code
 
 ENV HOSTNAME=agent
 ENV VEHICLE_NAME=agent
@@ -56,5 +56,10 @@ RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
     . ${CATKIN_WS_DIR}/devel/setup.bash  && \
     catkin build --workspace /code/submission_ws
 
+
+RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
+    . ${CATKIN_WS_DIR}/devel/setup.bash  && \
+    catkin build --workspace /code/solution
+
 ENV DISABLE_CONTRACTS=1
-CMD ["bash", "launchers/run_and_start.sh"]
+CMD ["bash", "/code/run_and_start.sh"]
