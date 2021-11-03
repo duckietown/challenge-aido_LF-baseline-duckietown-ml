@@ -17,7 +17,7 @@ COPY --from=baseline ${CATKIN_WS_DIR}/src/dt-core ${CATKIN_WS_DIR}/src/dt-core
 
 COPY --from=baseline /data/config /data/config
 
-COPY --from=baseline /code/submission_ws/src/agent /code/submission_ws/src/agent
+COPY --from=baseline /code/submission_ws/ /code/submission_ws/
 
 # here, we install the requirements, some requirements come by default
 # you can add more if you need to in requirements.txt
@@ -51,6 +51,11 @@ ENV ROS_MASTER_URI=http://localhost:11311
 
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
     catkin build --workspace ${CATKIN_WS_DIR}
+
+RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
+    . ${CATKIN_WS_DIR}/devel/setup.bash  && \
+    catkin build --workspace /code/submission_ws
+
 
 RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
     . ${CATKIN_WS_DIR}/devel/setup.bash  && \
