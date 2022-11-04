@@ -24,3 +24,4 @@ For submitting, please follow [the instructions available in the book][book].
 This is a simple template for an ROS agent that does Lane Following with the Duckietown stack.
 
 [This code is documented here](https://docs.duckietown.org/daffy/AIDO/out/ros_baseline.html).
+
