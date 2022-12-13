@@ -1,4 +1,5 @@
 aido-protocols-daffy
+duckietown-utils-daffy
 
 # WARNING: as of 11/10/2022, these are the libraries' versions that work on arm32v7
 # numpy==1.17.3
